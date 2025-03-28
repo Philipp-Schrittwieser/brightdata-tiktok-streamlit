@@ -21,6 +21,7 @@ def render_finished_jobs_tab():
                 st.write(f"**Erstellt:** {job['created_at'].strftime('%d.%m.%Y, %H:%M')}")
                 st.write(f"**Abgeschlossen:** {job['completed_at'].strftime('%d.%m.%Y, %H:%M')}")
                 
+                
                 # Profildaten laden
                 profile_data = get_scraped_profile(job['snapshot_id'])
                 
