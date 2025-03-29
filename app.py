@@ -36,12 +36,14 @@ def check_running_jobs():
         time.sleep(30)  # 30 Sekunden warten
 
 st.markdown("""
-              <style>
+            <style>
               #MainMenu {visibility: hidden;}
               footer {visibility: hidden;}
               #stDecoration {display: none;}
+              #data-testid="stToolbar" {display: none;}
               .stAppToolbar {display: none;}
               .stButton:focus {color: white !important; }
+            
               
               /* Sidebar-Anpassungen - jetzt komplett schwarz */
               .css-1d391kg {
