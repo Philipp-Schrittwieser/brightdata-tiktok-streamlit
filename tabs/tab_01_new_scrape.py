@@ -7,53 +7,91 @@ from db.db import get_collection
 jobs = get_collection("jobs")
 
 def render_new_scrape_tab():
-    st.header("Neuen Scrape starten")
-    
-    # TikTok Handle Eingabe 
-    tiktok_handle = st.text_input("TikTok Handle", "@marswalk")
-    
-    # Validierung
-    if not tiktok_handle.startswith('@'):
-        st.error("Der Handle muss mit @ beginnen")
-        is_valid = False
-    else:
-        is_valid = True
-    
-    # Nur noch Anzahl der Posts wählbar
-    num_posts = st.number_input("Anzahl Posts", min_value=1, value=10)
-    
-    # Start Button
-    if st.button("Start Scraping", type="primary") and is_valid:
-        with st.spinner("Starte Scraping..."):
-            try:
-                tiktok_url = f"https://www.tiktok.com/{tiktok_handle}"
-                # # TikTok URL zusammenbauen
-                # tiktok_handles_list = tiktok_handle.split(" ")
-                # tiktok_urls = []
-                # for handle in tiktok_handles_list:
-                #     tiktok_urls.append(f"https://www.tiktok.com/{handle}")
-                
-                # Scraping starten
-                result = scrape.trigger_scraper(tiktok_url, num_posts)
+    # Custom CSS für modernes Design
+    st.markdown("""
+    <style>
+    .stApp {
+        background-color: black;
+        color: white;
+    }
+    .css-18e3th9 {
+        padding: 2rem 10rem;
+    }
+    .stButton>button {
+        background-color: #ec4899;
+        color: white;
+        font-weight: 500;
+        border: none;
+        border-radius: 0.5rem;
+        padding: 0.75rem 2rem;
+    }
+    .stButton>button:hover {
+        background-color: #db2777;
+    }
+    .stTextInput>div>div>input {
+        background-color: #111827;
+        border: 2px solid #374151;
+        border-radius: 0.5rem;
+        color: white;
+        padding: 0.75rem 1.5rem;
+    }
+    .stTextInput>div>div>input:focus {
+        border-color: #ec4899;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+        
 
-                print(result)
-                
-                if 'snapshot_id' in result:
-                    # In MongoDB speichern
-                    job_data = {
-                        'snapshot_id': result['snapshot_id'],
-                        'profile_url': tiktok_url,
-                        'profile_handle': tiktok_handle,
-                        'num_posts': num_posts,
-                        'status': 'running',
-                        'created_at': datetime.now()
-                    }
-                    jobs.insert_one(job_data)
-                    st.success(f"Scraping gestartet! Job ID: {result['snapshot_id']}")
-                    st.info("Der Job läuft im Hintergrund weiter.")
-                    st.rerun()
-
-                else:
-                    st.error("Fehler beim Starten")
-            except Exception as e:
-                st.error(f"Fehler: {str(e)}") 
+    # Anleitung
+    st.markdown("""
+    <div style='background-color: rgba(31, 41, 55, 0.5); border: 1px solid #4b5563; border-radius: 0.5rem; padding: 1.5rem; max-width: 42rem; margin: 0 auto 3rem auto;'>
+        <h3 style='font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: #ec4899;'>So funktioniert's:</h3>
+        <ul style='color: #d1d5db; margin-left: 1rem;'>
+            <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>1.</span> Gib die TikTok Handles (inkl. @) ein und wähle die Anzahl der Posts</li>
+            <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>2.</span> Klicke auf "Analysieren" und links siehst du deinen laufenden Job</li>
+            <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>3.</span> Sobald der Job abgeschlossen ist, wird er in fertige Jobs angezeigt</li>
+            <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>4.</span> Du kannst den Browser oder Tab jederzeit schließen - der Job läuft weiter</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Input-Bereich
+    col1, col2, col3 = st.columns([4, 1, 1], vertical_alignment="bottom")
+    with col1:
+        tiktok_input = st.text_input("", value="", placeholder="@creator1 @creator2 @creator3")
+    
+    with col2:
+        # Anzahl Posts
+        num_posts = st.number_input("", min_value=1, value=10, label_visibility="collapsed")
+        # Start Button
+    
+    with col3:
+        if st.button("Analysieren", type="primary"):
+            # Handles verarbeiten
+            raw_parts = tiktok_input.split("@")
+            handle_list = ["@" + part.strip() for part in raw_parts if part.strip()]
+            
+            if not handle_list:
+                st.error("Bitte gib mindestens einen Handle ein")
+            else:
+                with st.spinner("Starte Analyse..."):
+                    try:
+                        tiktok_urls = [f"https://www.tiktok.com/{handle}" for handle in handle_list]
+                        result = scrape.trigger_scraper(tiktok_urls, num_posts)
+                        
+                        if 'snapshot_id' in result:
+                            job_data = {
+                                'snapshot_id': result['snapshot_id'],
+                                'profile_urls': tiktok_urls,
+                                'profile_handles': handle_list,
+                                'num_posts': num_posts,
+                                'status': 'running',
+                                'created_at': datetime.now()
+                            }
+                            jobs.insert_one(job_data)
+                            st.success(f"Analyse für {len(handle_list)} Profile gestartet!")
+                            st.rerun()
+                        else:
+                            st.error("Fehler beim Starten")
+                    except Exception as e:
+                        st.error(f"Fehler: {str(e)}") 

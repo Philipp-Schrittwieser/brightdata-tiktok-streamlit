@@ -15,54 +15,54 @@ if not BRIGHTDATA_API_KEY:
     raise ValueError("BRIGHTDATA_API_KEY nicht gefunden in Streamlit secrets")
 
 
+import requests
+
+
+
 # ===== Scraper Funktionen =====
-def trigger_scraper(profile_url="https://www.tiktok.com/@marswalk", num_posts=10):
-    """
-    Startet einen neuen Scraping-Job über die Brightdata API.
+def trigger_scraper(profile_urls=None, num_posts=10):
+    """Startet einen Scraping-Job für TikTok-Profile"""
     
-    Args:
-        profile_url (str): TikTok Profil URL für den Scrape
-        num_posts (int): Anzahl der zu scrapenden Posts
-        
-    Returns:
-        dict: JSON-Antwort der API mit snapshot_id bei Erfolg
-    """
+    print("Trigger Scraper")
+    
+    # Input-Daten als Array erstellen
+    data = []
+    
+    for url in profile_urls:
+        data.append({
+            "url": url,
+            "num_of_posts": num_posts,
+            "what_to_collect": "Posts & Reposts",
+            "start_date": "",
+            "end_date": "",
+            "post_type": "",
+        })
+    
+
     url = "https://api.brightdata.com/datasets/v3/trigger"
+    
     headers = {
         "Authorization": f"Bearer {BRIGHTDATA_API_KEY}",
         "Content-Type": "application/json",
     }
+    
     params = {
         "dataset_id": DATASET_ID,
         "include_errors": "true",
         "type": "discover_new",
         "discover_by": "profile_url",
     }
-    data = {
-        "deliver": {
-            "type": "s3",
-            "filename": {"template": "{[snapshot_id]}", "extension": "json"},
-            "bucket": "bucket-for-tiktok",
-            "credentials": {
-                "aws-access-key": AWS_ACCESS_KEY,
-                "aws-secret-key": AWS_SECRET_KEY
-            },
-            "directory": "tiktok/data"
-        },
-        "input": [{
-            "url": "https://www.tiktok.com/@marswalk",
-            "num_of_posts": num_posts,
-            "posts_to_not_include": [],
-            "what_to_collect": "Posts & Reposts",
-            "start_date": "",
-            "end_date": "",
-            "post_type": ""
-        }],
-    }
-
-    # API-Anfrage senden
+  
+    print("API-Anfrage senden")
     response = requests.post(url, headers=headers, params=params, json=data)
-    return response.json()
+    print(response.json())
+    
+    # Fehlerbehandlung
+    try:
+        return response.json()
+    except Exception as e:
+        print(f"Fehler: {e}, Status: {response.status_code}, Text: {response.text}")
+        return {"error": str(e)}
 
 
 def check_status(snapshot_id):
@@ -86,8 +86,11 @@ def check_status(snapshot_id):
     
     if response.status_code == 200:
         try:
+            # Prüfen, ob die Antwort leer ist
+            if not response.text.strip():
+                return {"error": "API lieferte leere Antwort"}
+            
             # Der API-Response kann mehrere JSON-Objekte enthalten
-            # Die müssen wir in ein korrektes JSON-Array umwandeln
             text = "[" + response.text.replace("}\n{", "},{") + "]"
             data = json.loads(text)
             
