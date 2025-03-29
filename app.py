@@ -40,7 +40,7 @@ st.markdown("""
               #MainMenu {visibility: hidden;}
               footer {visibility: hidden;}
               #stDecoration {display: none;}
-              #data-testid="stToolbar" {display: none;}
+              #stToolbar {display: none;}
               .stAppToolbar {display: none;}
               .stButton:focus {color: white !important; }
             
