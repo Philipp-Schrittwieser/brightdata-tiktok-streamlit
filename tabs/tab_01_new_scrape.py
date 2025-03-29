@@ -62,10 +62,12 @@ def render_new_scrape_tab():
     
     with col2:
         # Anzahl Posts
+        st.write("")
+        st.write("")
         num_posts = st.number_input("", min_value=1, value=10, label_visibility="collapsed")
-        # Start Button
     
     with col3:
+        st.write("")
         if st.button("Analysieren", type="primary"):
             # Handles verarbeiten
             raw_parts = tiktok_input.split("@")
