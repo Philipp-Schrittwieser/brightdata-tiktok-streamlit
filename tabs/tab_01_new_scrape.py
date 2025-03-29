@@ -56,7 +56,7 @@ def render_new_scrape_tab():
     """, unsafe_allow_html=True)
     
     # Input-Bereich
-    col1, col2, col3 = st.columns([4, 1, 1], vertical_alignment="bottom")
+    col1, col2, col3 = st.columns([4, 1, 1])
     with col1:
         tiktok_input = st.text_input("", value="", placeholder="@creator1 @creator2 @creator3")
     
