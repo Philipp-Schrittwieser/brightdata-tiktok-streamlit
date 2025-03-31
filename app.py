@@ -32,6 +32,8 @@ st.markdown("""
               .st-emotion-cache-zq5wmm {display: none;}
               .st-emotion-cache-1p1m4ay {display: none;}
               .stActionButton {display: none;}
+              ._viewerBadge_nim44_23 {display: none;}
+              ._container_gzau3_1 {display: none;}
             """, unsafe_allow_html=True)
 
 
