@@ -26,7 +26,9 @@ st.markdown("""
               #stDecoration {display: none;}
               #stToolbar {display: none;}
               .stAppToolbar {display: none;}
+              #stHeader {display: none;}
             """, unsafe_allow_html=True)
+
 
 
 # Job Checker Funktion
