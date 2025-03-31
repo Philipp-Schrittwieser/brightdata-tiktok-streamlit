@@ -19,6 +19,16 @@ st.set_page_config(
     layout="wide"
 )
 
+st.markdown("""
+            <style>
+              #MainMenu {visibility: hidden;}
+              footer {visibility: hidden;}
+              #stDecoration {display: none;}
+              #stToolbar {display: none;}
+              .stAppToolbar {display: none;}
+            """, unsafe_allow_html=True)
+
+
 # Job Checker Funktion
 def check_running_jobs():
     while True:
