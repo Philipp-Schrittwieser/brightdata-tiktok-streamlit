@@ -32,10 +32,7 @@ st.markdown("""
               .st-emotion-cache-zq5wmm {display: none !important;}
               .st-emotion-cache-1p1m4ay {display: none !important;}
               .stActionButton {display: none !important;}
-              ._container_gzau3_1, ._viewerBadge_nim44_23, ._link_gzau3_10 {display: none !important;}
-                a[href="https://streamlit.io/cloud"] {
-                visibility: hidden !important;
-                }
+            }
             """, unsafe_allow_html=True)
 
 
@@ -54,6 +51,7 @@ def check_running_jobs():
                         'completed_at': datetime.now()
                     }}
                 )
+                st.toast("✅ Scraping abgeschlossen!", icon="🎉")
         time.sleep(30)  # 30 Sekunden warten
 
 st.markdown("""

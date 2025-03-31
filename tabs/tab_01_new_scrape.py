@@ -2,6 +2,7 @@ import streamlit as st
 import scrape
 from datetime import datetime
 from db.db import get_collection
+import time
 
 # MongoDB Setup
 jobs = get_collection("jobs")
@@ -44,8 +45,11 @@ def render_new_scrape_tab():
     
     # Input-Bereich
     col1, col2, col3 = st.columns([4, 1, 1])
+
     with col1:
-        tiktok_input = st.text_input("", value="", placeholder="@creator1 @creator2 @creator3")
+        if 'key_input' not in st.session_state:
+            st.session_state.key_input = 1
+        tiktok_input = st.text_input("", value="", placeholder="@creator1 @creator2 @creator3", key=st.session_state.key_input)
     
     with col2:
         # Anzahl Posts
@@ -78,7 +82,10 @@ def render_new_scrape_tab():
                                 'created_at': datetime.now()
                             }
                             jobs.insert_one(job_data)
+                            st.toast("🚀 Scraping gestartet!", icon="✨")
+                            time.sleep(2)
                             st.success(f"Analyse für {len(handle_list)} Profile gestartet!")
+                            st.session_state.key_input += 1
                             st.rerun()
                         else:
                             st.error("Fehler beim Starten")
