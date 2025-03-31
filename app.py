@@ -129,7 +129,7 @@ def main():
                 st.info(f"{job['num_posts']} Posts von {handles_text}... läuft")
 
     # Hauptbereich mit Tabs
-    tab1, tab2 = st.tabs(["Neuer Scrape", "Fertige Jobs"])
+    tab1, tab2 = st.tabs(["Neuen Job", "Fertige Jobs"])
     
     # Tab-Inhalte aus externen Dateien
     with tab1:
