@@ -75,6 +75,18 @@ def main():
     st.markdown("<h1 style='text-align: center; color: white; font-size: 3rem; font-weight: 700;'>TikTok Creator Analytics</h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #94a3b8; font-size: 1.5rem; margin-bottom: 3rem;'>We connect Boomers with Zoomers</p>", unsafe_allow_html=True)
     
+    # Anleitung
+    st.markdown("""
+    <div style='background-color: rgba(31, 41, 55, 0.5); border: 1px solid #4b5563; border-radius: 0.5rem; padding: 1.5rem; max-width: 42rem; margin: 0 auto 3rem auto;'>
+        <h3 style='font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: #ec4899; text-align: center;'>So funktioniert's:</h3>
+        <ul style='color: #d1d5db; margin-left: 1rem; list-style: none;'>
+            <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>1.</span> Gib die TikTok Handles (inkl. @) ein und wähle die Anzahl der Posts</li>
+            <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>2.</span> Klicke auf "Analysieren" und links siehst du deinen laufenden Job</li>
+            <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>3.</span> Sobald der Job abgeschlossen ist, wird er in fertige Jobs angezeigt</li>
+            <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>4.</span> Du kannst den Browser oder Tab jederzeit schließen - der Job läuft weiter</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
     
     # Sidebar - aktive Jobs anzeigen
     with st.sidebar:
