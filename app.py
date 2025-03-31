@@ -21,21 +21,18 @@ st.set_page_config(
 
 st.markdown("""
             <style>
-              #MainMenu {visibility: hidden;}
-              footer {visibility: hidden;}
-              #stDecoration {display: none;}
-              #stToolbar {display: none;}
-              .stAppToolbar {display: none;}
-              #stHeader {display: none;}
-              .st-emotion-cache-97ja1j {display: none;}
-              .st-emotion-cache-1dp5vir {display: none;}
-              .st-emotion-cache-zq5wmm {display: none;}
-              .st-emotion-cache-1p1m4ay {display: none;}
-              .stActionButton {display: none;}
-              ._container_gzau3_1 {display: none;}
-              ._viewerBadge_nim44_23 {display: none;}
-              ._link_gzau3_10 {display: none;}
-              ._container_gzau3_1 {display: none;}
+              #MainMenu {visibility: hidden !important;}
+              footer {visibility: hidden !important;}
+              #stDecoration {display: none !important;}
+              #stToolbar {display: none !important;}
+              .stAppToolbar {display: none !important;}
+              #stHeader {display: none !important;}
+              .st-emotion-cache-97ja1j {display: none !important;}
+              .st-emotion-cache-1dp5vir {display: none !important;}
+              .st-emotion-cache-zq5wmm {display: none !important;}
+              .st-emotion-cache-1p1m4ay {display: none !important;}
+              .stActionButton {display: none !important;}
+              ._container_gzau3_1, ._viewerBadge_nim44_23, ._link_gzau3_10 {display: none !important;}
             """, unsafe_allow_html=True)
 
 
@@ -58,11 +55,11 @@ def check_running_jobs():
 
 st.markdown("""
             <style>
-              #MainMenu {visibility: hidden;}
-              footer {visibility: hidden;}
-              #stDecoration {display: none;}
-              #stToolbar {display: none;}
-              .stAppToolbar {display: none;}
+              #MainMenu {visibility: hidden !important;}
+              footer {visibility: hidden !important;}
+              #stDecoration {display: none !important;}
+              #stToolbar {display: none !important;}
+              .stAppToolbar {display: none !important;}
               .stButton:focus {color: white !important; }
             
               
