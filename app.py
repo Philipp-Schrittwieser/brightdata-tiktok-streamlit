@@ -33,6 +33,9 @@ st.markdown("""
               .st-emotion-cache-1p1m4ay {display: none !important;}
               .stActionButton {display: none !important;}
               ._container_gzau3_1, ._viewerBadge_nim44_23, ._link_gzau3_10 {display: none !important;}
+                a[href="https://streamlit.io/cloud"] {
+                visibility: hidden !important;
+                }
             """, unsafe_allow_html=True)
 
 
