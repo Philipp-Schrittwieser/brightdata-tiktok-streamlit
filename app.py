@@ -27,6 +27,11 @@ st.markdown("""
               #stToolbar {display: none;}
               .stAppToolbar {display: none;}
               #stHeader {display: none;}
+              .st-emotion-cache-97ja1j {display: none;}
+              .st-emotion-cache-1dp5vir {display: none;}
+              .st-emotion-cache-zq5wmm {display: none;}
+              .st-emotion-cache-1p1m4ay {display: none;}
+              .stActionButton {display: none;}
             """, unsafe_allow_html=True)
 
 
