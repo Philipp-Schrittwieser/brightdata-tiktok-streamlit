@@ -2,9 +2,16 @@ import streamlit as st
 import pymongo
 from datetime import datetime
 
+def close_database():
+    if 'db' in st.session_state:
+        st.session_state.db.client.close()
+        del st.session_state.db
+
 def get_database():
     if 'db' not in st.session_state:
-        # Erste Verbindung
+        # Schließe alte Verbindung falls vorhanden
+        close_database()
+        # Erstelle neue Verbindung
         client = pymongo.MongoClient(st.secrets["DB_CONNECTION_STRING"])
         st.session_state.db = client["tiktok_scraper"]
     
