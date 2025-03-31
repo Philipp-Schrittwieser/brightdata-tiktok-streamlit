@@ -102,7 +102,7 @@ def main():
             <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>1.</span> Gib die TikTok Handles (inkl. @) ein und wähle die Anzahl der Posts</li>
             <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>2.</span> Klicke auf "Analysieren" und links siehst du deinen laufenden Job</li>
             <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>3.</span> Sobald der Job abgeschlossen ist, wird er in fertige Jobs angezeigt</li>
-            <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>4.</span> Du kannst den Browser oder Tab jederzeit schließen - der Job läuft weiter</li>
+            <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>4.</span> Während dem Scraping lasse den Browser und Tab am besten offen</li>
         </ul>
     </div>
     """, unsafe_allow_html=True)

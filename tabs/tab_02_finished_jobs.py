@@ -90,10 +90,11 @@ def render_finished_jobs_tab():
                         for post in posts:
                             table_data.append({
                                 "Creator": post.get('profile_username', '-'),
-                                "Beschreibung": post.get('description', 'Keine Beschreibung')[:50] + '...' if len(post.get('description', '')) > 50 else post.get('description', 'Keine Beschreibung'),
+                                "Beschreibung": post.get('description', 'Keine Beschreibung')[:25] + '...' if len(post.get('description', '')) > 50 else post.get('description', 'Keine Beschreibung'),
                                 "Likes": post.get('digg_count', 0),
                                 "Shares": post.get('share_count', 0),
                                 "Kommentare": post.get('comment_count', 0),
+                                "Gespeichert": post.get('collect_count', 0),
                                 "Aufrufe": post.get('play_count', 0),
                                 "Erstellt": post.get('create_time', 'Unbekannt').split('T')[0] if 'T' in post.get('create_time', '') else post.get('create_time', 'Unbekannt')
                             })
