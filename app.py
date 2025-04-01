@@ -37,22 +37,22 @@ st.markdown("""
 
 
 
-# Job Checker Funktion
-def check_running_jobs():
-    while True:
-        running_jobs = jobs.find({"status": "running"})
-        for job in running_jobs:
-            status = scrape.check_status(job['snapshot_id'])
-            if 'message' in status:
-                jobs.update_one(
-                    {'_id': job['_id']},
-                    {'$set': {
-                        'status': 'completed',
-                        'completed_at': datetime.now()
-                    }}
-                )
-                st.toast("✅ Scraping abgeschlossen!", icon="🎉")
-        time.sleep(30)  # 30 Sekunden warten
+# # Job Checker Funktion
+# def check_running_jobs():
+#     while True:
+#         running_jobs = jobs.find({"status": "running"})
+#         for job in running_jobs:
+#             status = scrape.check_status(job['snapshot_id'])
+#             if 'message' in status:
+#                 jobs.update_one(
+#                     {'_id': job['_id']},
+#                     {'$set': {
+#                         'status': 'completed',
+#                         'completed_at': datetime.now()
+#                     }}
+#                 )
+#                 st.toast("✅ Scraping abgeschlossen!", icon="🎉")
+#         time.sleep(30)  # 30 Sekunden warten
 
 st.markdown("""
             <style>
@@ -86,10 +86,10 @@ st.markdown("""
 
 def main():
     # Start Job Checker wenn noch nicht gestartet
-    if 'job_checker_running' not in st.session_state:
-        thread = threading.Thread(target=check_running_jobs, daemon=True)
-        thread.start()
-        st.session_state.job_checker_running = True
+    # if 'job_checker_running' not in st.session_state:
+    #     thread = threading.Thread(target=check_running_jobs, daemon=True)
+    #     thread.start()
+    #     st.session_state.job_checker_running = True
     
     st.markdown("<h1 style='text-align: center; color: white; font-size: 3rem; font-weight: 700;'>TikTok Creator Analytics</h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #94a3b8; font-size: 1.5rem; margin-bottom: 3rem;'>We connect Boomers with Zoomers</p>", unsafe_allow_html=True)
@@ -102,7 +102,7 @@ def main():
             <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>1.</span> Gib die TikTok Handles (inkl. @) ein und wähle die Anzahl der Posts</li>
             <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>2.</span> Klicke auf "Analysieren" und links siehst du deinen laufenden Job</li>
             <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>3.</span> Sobald der Job abgeschlossen ist, wird er in fertige Jobs angezeigt</li>
-            <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>4.</span> Während dem Scraping lasse den Browser und Tab am besten offen</li>
+            <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>4.</span> Du kannst den Browser jederzeit schließen, das Scraping läuft weiter</li>
         </ul>
     </div>
     """, unsafe_allow_html=True)

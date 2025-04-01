@@ -55,7 +55,7 @@ def render_new_scrape_tab():
         # Anzahl Posts
         st.write("")
         st.write("")
-        num_posts = st.number_input("", min_value=1, value=10, label_visibility="collapsed")
+        num_posts = st.number_input("Posts pro Profil", min_value=1, value=10, label_visibility="collapsed")
     
     with col3:
         st.write("")

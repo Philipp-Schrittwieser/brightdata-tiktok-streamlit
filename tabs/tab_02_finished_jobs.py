@@ -5,18 +5,17 @@ import pandas as pd
 import io
 
 # MongoDB Setup
-jobs = get_collection("jobs")
+scraped_profiles = get_collection("scraped_profiles")
+
 
 def render_finished_jobs_tab():
     st.header("Abgeschlossene Jobs")
     
-    completed_jobs = jobs.find({"status": "completed"}).sort('completed_at', -1)
-    completed_jobs_list = list(completed_jobs)
-    
-    if len(completed_jobs_list) == 0:
+    if scraped_profiles.count_documents({}) == 0:
         st.info("Keine fertigen Jobs gefunden")
     else:
-        for job in completed_jobs_list:
+        scraped_cursor = scraped_profiles.find()
+        for job in scraped_cursor:
             # Anpassung für mehrere Handles
             if 'profile_handles' in job:
                 # Mehrere Handles
@@ -28,13 +27,13 @@ def render_finished_jobs_tab():
                 handle_text = f"{handle[:50]}..."
             
             # Profildaten für Export laden
-            profile_data = get_scraped_profile(job['snapshot_id'])
+            profile_data = get_scraped_profile(job['_id'])
             
             # Zwei Spalten erstellen: eine für Expander, eine für Buttons
             col1, col2, col3 = st.columns([8, 1, 1])
             
             with col1:
-                expander = st.expander(f"{job['num_posts']} Posts von {handle_text} gescraped am {job['created_at'].strftime('%d.%m.%Y um %H:%M')}")
+                expander = st.expander(f"Posts von {handle_text} gescraped am {job['scraped_at'].strftime('%d.%m.%Y um %H:%M')}")
             
             # Buttons nur hinzufügen wenn Daten verfügbar
             if profile_data and 'posts' in profile_data:
@@ -47,7 +46,7 @@ def render_finished_jobs_tab():
                         st.download_button(
                             label="CSV",
                             data=csv,
-                            file_name=f"tiktok_data_{job['snapshot_id']}.csv",
+                            file_name=f"tiktok_data_{job['_id']}.csv",
                             mime='text/csv',
                             use_container_width=True,
                             type="primary"
@@ -60,7 +59,7 @@ def render_finished_jobs_tab():
                     st.download_button(
                         label="JSON",
                         data=json_str,
-                        file_name=f"tiktok_data_{job['snapshot_id']}.json",
+                        file_name=f"tiktok_data_{job['_id']}.json",
                         mime='application/json',
                         use_container_width=True,
                         type="primary"
@@ -76,9 +75,8 @@ def render_finished_jobs_tab():
                 else:
                     st.write(f"**Profil:** {job.get('profile_url', 'Nicht verfügbar')}")
                 
-                st.write(f"**Posts pro Profil:** {job['num_posts']}")
-                st.write(f"**Erstellt:** {job['created_at'].strftime('%d.%m.%Y, %H:%M')}")
-                st.write(f"**Abgeschlossen:** {job['completed_at'].strftime('%d.%m.%Y, %H:%M')}")
+                # st.write(f"**Posts pro Profil:** {job['num_posts']}")
+                st.write(f"**Erstellt:** {job['scraped_at'].strftime('%d.%m.%Y, %H:%M')}")
                 
                 if profile_data and 'posts' in profile_data:
                     posts = profile_data['posts']

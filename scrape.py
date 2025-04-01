@@ -7,15 +7,18 @@ from datetime import datetime
 # Secrets aus Streamlit Config laden
 BRIGHTDATA_API_KEY = st.secrets["BRIGHTDATA_API_KEY"]  # API-Key für Brightdata
 DATASET_ID = st.secrets["DATASET_ID"]                  # Dataset ID für TikTok Scraper
+ENDPOINT = st.secrets["ENDPOINT"]
+AUTH_HEADER = st.secrets["AUTH_HEADER"]
+NOTIFY = st.secrets["NOTIFY"]
+
+
+# Wir nicht gebraucht (AWS)
 AWS_ACCESS_KEY = st.secrets["AWS_ACCESS_KEY"]          # AWS Zugangsdaten für S3
 AWS_SECRET_KEY = st.secrets["AWS_SECRET_KEY"]          # AWS Secret für S3
 
 # Grundlegende Prüfung der Konfiguration
 if not BRIGHTDATA_API_KEY:
     raise ValueError("BRIGHTDATA_API_KEY nicht gefunden in Streamlit secrets")
-
-
-import requests
 
 
 
@@ -48,6 +51,11 @@ def trigger_scraper(profile_urls=None, num_posts=10):
     
     params = {
         "dataset_id": DATASET_ID,
+        "endpoint": ENDPOINT,
+        "auth_header": AUTH_HEADER,
+        "notify": NOTIFY,
+        "format": "json",
+        "uncompressed_webhook": "true",
         "include_errors": "true",
         "type": "discover_new",
         "discover_by": "profile_url",
@@ -55,7 +63,13 @@ def trigger_scraper(profile_urls=None, num_posts=10):
   
     print("API-Anfrage senden")
     response = requests.post(url, headers=headers, params=params, json=data)
+
     print(response.json())
+
+    print("url: ", url)
+    print("headers: ", headers)
+    print("params: ", params)
+    print("data: ", data)
     
     # Fehlerbehandlung
     try:
