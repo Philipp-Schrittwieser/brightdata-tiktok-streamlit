@@ -40,6 +40,8 @@ def render_finished_jobs_tab():
             if posts:
                 with col2:
                     df = pd.DataFrame(posts)
+                    # entferne post_id, original_sound, profile_id, profile_avatar, profile_biography, preview_image, official_item, secu_id, original_item, shortcode, width, ratio, video_url, music, cdn_url, is_verified, carousel_images, tagged_user, tt_chain_token, commerce_info, timestamp, input, discovery_input, region
+                    df = df.drop(columns=['post_id', 'original_sound', 'profile_id', 'profile_avatar', 'profile_biography', 'preview_image', 'offical_item', 'secu_id', 'original_item', 'shortcode', 'width', 'ratio', 'video_url', 'music', 'cdn_url', 'is_verified', 'carousel_images', 'tagged_user', 'tt_chain_token', 'commerce_info', 'timestamp', 'input', 'discovery_input', 'region'])
                     csv = df.to_csv(index=False).encode('utf-8')
                     st.download_button(
                         label="CSV",
@@ -95,9 +97,8 @@ def render_finished_jobs_tab():
                             "Kommentare": str(post.get('comment_count', 0)),
                             "Gespeichert": str(post.get('collect_count', 0)),
                             "Aufrufe": str(post.get('play_count', 0)),
-                            "Dauer": f"{post.get('video_duration', 0)}s",
                             "Erstellt": post.get('create_time', 'Unbekannt').split('T')[0] if 'T' in post.get('create_time', '') else post.get('create_time', 'Unbekannt'),
-                            "Link": f"[Video]({post.get('url', '')})"
+                            "Link": f"{post.get('url', '')}"
                         })
                     
                     # DataFrame erstellen und anzeigen

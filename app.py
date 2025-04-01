@@ -37,22 +37,6 @@ st.markdown("""
 
 
 
-# # Job Checker Funktion
-# def check_running_jobs():
-#     while True:
-#         running_jobs = jobs.find({"status": "running"})
-#         for job in running_jobs:
-#             status = scrape.check_status(job['snapshot_id'])
-#             if 'message' in status:
-#                 jobs.update_one(
-#                     {'_id': job['_id']},
-#                     {'$set': {
-#                         'status': 'completed',
-#                         'completed_at': datetime.now()
-#                     }}
-#                 )
-#                 st.toast("✅ Scraping abgeschlossen!", icon="🎉")
-#         time.sleep(30)  # 30 Sekunden warten
 
 st.markdown("""
             <style>
@@ -84,12 +68,18 @@ st.markdown("""
               </style>
             """, unsafe_allow_html=True)
 
+def check_running_jobs():
+    while True:
+        running_jobs = jobs.find({"status": "running"})
+        if not list(running_jobs):
+            break
+        time.sleep(30)
+
 def main():
-    # Start Job Checker wenn noch nicht gestartet
-    # if 'job_checker_running' not in st.session_state:
-    #     thread = threading.Thread(target=check_running_jobs, daemon=True)
-    #     thread.start()
-    #     st.session_state.job_checker_running = True
+    # Start job checker in background
+    job_checker = threading.Thread(target=check_running_jobs)
+    job_checker.daemon = True
+    job_checker.start()
     
     st.markdown("<h1 style='text-align: center; color: white; font-size: 3rem; font-weight: 700;'>TikTok Creator Analytics</h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #94a3b8; font-size: 1.5rem; margin-bottom: 3rem;'>We connect Boomers with Zoomers</p>", unsafe_allow_html=True)
