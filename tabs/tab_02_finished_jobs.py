@@ -15,8 +15,8 @@ def render_finished_jobs_tab():
     else:
         scraped_cursor = scraped_profiles.find()
         for job in scraped_cursor:
-            print("JOB STRUKTUR:")
-            print(json.dumps(job, default=str, indent=2))  # Bessere Ausgabe
+            # print("JOB STRUKTUR:")
+            # print(json.dumps(job, default=str, indent=2))  # Bessere Ausgabe
             # Statt profile_handle/profile_url sollten wir die URLs aus den Posts holen
             profile_url = job['posts'][0].get('profile_url', 'Unbekannt')
             username = None

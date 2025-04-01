@@ -1,23 +1,36 @@
 import streamlit as st
+from streamlit_autorefresh import st_autorefresh
 import scrape
 from datetime import datetime
 import time
-import threading
 from db.db import get_collection
 
 # Tabs importieren
 from tabs.tab_01_new_scrape import render_new_scrape_tab
 from tabs.tab_02_finished_jobs import render_finished_jobs_tab
 
-
-# MongoDB Setup
-jobs = get_collection("jobs")
+from datetime import timedelta
 
 st.set_page_config(
     page_title="TikTok Creator Analytics",
     page_icon=None,
     layout="wide"
 )
+
+# MongoDB Setup
+jobs = get_collection("jobs")
+
+# Auto-Refresh alle 3 Sekunden
+st_autorefresh(interval=6000, key="autorefresh")
+
+def get_running_jobs():
+    running_jobs = jobs.find({"status": "running"})
+    jobs_list = list(running_jobs)
+    return {
+        "count": len(jobs_list),
+        "last_check": datetime.now().strftime("%H:%M:%S"),
+        "jobs": jobs_list
+    }
 
 st.markdown("""
             <style>
@@ -68,19 +81,7 @@ st.markdown("""
               </style>
             """, unsafe_allow_html=True)
 
-def check_running_jobs():
-    while True:
-        running_jobs = jobs.find({"status": "running"})
-        if not list(running_jobs):
-            break
-        time.sleep(30)
-
 def main():
-    # Start job checker in background
-    job_checker = threading.Thread(target=check_running_jobs)
-    job_checker.daemon = True
-    job_checker.start()
-    
     st.markdown("<h1 style='text-align: center; color: white; font-size: 3rem; font-weight: 700;'>TikTok Creator Analytics</h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #94a3b8; font-size: 1.5rem; margin-bottom: 3rem;'>We connect Boomers with Zoomers</p>", unsafe_allow_html=True)
     
@@ -102,21 +103,20 @@ def main():
         st.image("logo.png", width=240)
 
         st.header("Aktive Jobs")
-        running_jobs = jobs.find({"status": "running"}).sort('created_at', -1)
-        running_jobs_list = list(running_jobs)
+        jobs_info = get_running_jobs()
         
-        if len(running_jobs_list) == 0:
-            st.info("Keine aktiven Jobs")
-        else:
-            for job in running_jobs_list:
-                # Anpassung für mehrere Handles
-                if 'profile_handles' in job:
-                    handle_count = len(job['profile_handles'])
-                    handles_text = f"{handle_count} Profile" if handle_count > 1 else job['profile_handles'][0][:8]
+        if jobs_info["count"] > 0:
+            for job in jobs_info["jobs"]:
+                handles = job.get('profile_handles', [])
+                if handles:
+                    handles_text = ", ".join(handles)
+                    st.info(f"{handles_text} - {job.get('num_posts', 0)} Posts")
                 else:
-                    handles_text = job.get('profile_handle', job.get('profile_url', 'Unbekannt'))[:8]
-                
-                st.info(f"{job['num_posts']} Posts von {handles_text}... läuft")
+                    st.info("Unbekannte Creator - {job.get('num_posts', 0)} Posts")
+        else:
+            st.info("Keine aktiven Jobs")
+            
+        st.markdown(f"<p style='color: #94a3b8; font-size: 0.8rem;'>Letzter Check: {jobs_info['last_check']}</p>", unsafe_allow_html=True)
 
     # Hauptbereich mit Tabs
     tab1, tab2 = st.tabs(["Neuen Job", "Fertige Jobs"])

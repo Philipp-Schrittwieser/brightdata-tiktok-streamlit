@@ -18,4 +18,4 @@ data = [
 ]
 
 response = requests.post(url, headers=headers, params=params, json=data)
-print(response.json())
+# print(response.json())

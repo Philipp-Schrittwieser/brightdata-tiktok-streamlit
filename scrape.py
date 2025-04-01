@@ -26,7 +26,7 @@ if not BRIGHTDATA_API_KEY:
 def trigger_scraper(profile_urls=None, num_posts=10):
     """Startet einen Scraping-Job für TikTok-Profile"""
     
-    print("Trigger Scraper")
+    # print("Trigger Scraper")
     
     # Input-Daten als Array erstellen
     data = []
@@ -61,15 +61,15 @@ def trigger_scraper(profile_urls=None, num_posts=10):
         "discover_by": "profile_url",
     }
   
-    print("API-Anfrage senden")
+    # print("API-Anfrage senden")
     response = requests.post(url, headers=headers, params=params, json=data)
 
-    print(response.json())
+    # print(response.json())
 
-    print("url: ", url)
-    print("headers: ", headers)
-    print("params: ", params)
-    print("data: ", data)
+    # print("url: ", url)
+    # print("headers: ", headers)
+    # print("params: ", params)
+    # print("data: ", data)
     
     # Fehlerbehandlung
     try:
