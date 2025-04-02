@@ -21,8 +21,7 @@ st.set_page_config(
 # MongoDB Setup
 jobs = get_collection("jobs")
 
-# Auto-Refresh alle 3 Sekunden
-st_autorefresh(interval=60000, key="autorefresh")
+
 
 def get_running_jobs():
     running_jobs = jobs.find({"status": "running"})
@@ -109,6 +108,9 @@ def main():
         jobs_info = get_running_jobs()
         
         if jobs_info["count"] > 0:
+            # Auto-Refresh alle 3 Sekunden
+            st_autorefresh(interval=60000, key="autorefresh")
+            
             for job in jobs_info["jobs"]:
                 handles = job.get('profile_handles', [])
                 if handles:
