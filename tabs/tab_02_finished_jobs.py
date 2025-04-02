@@ -29,8 +29,10 @@ def render_finished_jobs_tab():
             handle_text = username or "Unbekannt"
             
             # Zeit in Wien-Zeitzone umwandeln
+            utc_tz = pytz.timezone('UTC')
             vienna_tz = pytz.timezone('Europe/Vienna')
-            scraped_at_vienna = job['scraped_at'].astimezone(vienna_tz)
+            scraped_at_utc = job['scraped_at'].replace(tzinfo=utc_tz)
+            scraped_at_vienna = scraped_at_utc.astimezone(vienna_tz)
             
             # Zwei Spalten erstellen
             col1, col2, col3 = st.columns([8, 1, 1])
