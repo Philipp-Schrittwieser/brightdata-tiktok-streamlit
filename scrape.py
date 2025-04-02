@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 import json
 from datetime import datetime
+import pytz
 
 # ===== API Konfiguration =====
 # Secrets aus Streamlit Config laden
@@ -113,9 +114,10 @@ def check_status(snapshot_id):
             profiles = get_collection("scraped_profiles")
             
             # Ergebnisse strukturieren und speichern
+            utc_tz = pytz.timezone('UTC')
             result_data = {
                 'snapshot_id': snapshot_id,
-                'scraped_at': datetime.now(),
+                'scraped_at': datetime.now(utc_tz),
                 'posts': data
             }
             

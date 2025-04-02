@@ -4,6 +4,7 @@ import scrape
 from datetime import datetime
 import time
 from db.db import get_collection
+import pytz
 
 # Tabs importieren
 from tabs.tab_01_new_scrape import render_new_scrape_tab
@@ -26,6 +27,8 @@ st_autorefresh(interval=6000, key="autorefresh")
 def get_running_jobs():
     running_jobs = jobs.find({"status": "running"})
     jobs_list = list(running_jobs)
+    # Sortiere nach created_at aufsteigend (älteste zuerst)
+    jobs_list.sort(key=lambda x: x.get('created_at', datetime.min))
     return {
         "count": len(jobs_list),
         "last_check": datetime.now().strftime("%H:%M:%S"),
@@ -116,7 +119,13 @@ def main():
         else:
             st.info("Keine aktiven Jobs")
             
-        st.markdown(f"<p style='color: #94a3b8; font-size: 0.8rem;'>Letzter Check: {jobs_info['last_check']}</p>", unsafe_allow_html=True)
+        # Zeit in Wien-Zeitzone umwandeln
+        vienna_tz = pytz.timezone('Europe/Vienna')
+        current_time = datetime.now()
+        time_parts = jobs_info['last_check'].split(':')
+        last_check_dt = current_time.replace(hour=int(time_parts[0]), minute=int(time_parts[1]), second=int(time_parts[2]))
+        last_check_vienna = last_check_dt.astimezone(vienna_tz)
+        st.markdown(f"<p style='color: #94a3b8; font-size: 0.8rem;'>Letzter Check: {last_check_vienna.strftime('%H:%M:%S')}</p>", unsafe_allow_html=True)
 
     # Hauptbereich mit Tabs
     tab1, tab2 = st.tabs(["Neuen Job", "Fertige Jobs"])

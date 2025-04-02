@@ -3,6 +3,7 @@ from db.db import get_collection, get_scraped_profile
 import json
 import pandas as pd
 import io
+import pytz
 
 # MongoDB Setup
 scraped_profiles = get_collection("scraped_profiles")
@@ -27,11 +28,15 @@ def render_finished_jobs_tab():
             
             handle_text = username or "Unbekannt"
             
+            # Zeit in Wien-Zeitzone umwandeln
+            vienna_tz = pytz.timezone('Europe/Vienna')
+            scraped_at_vienna = job['scraped_at'].astimezone(vienna_tz)
+            
             # Zwei Spalten erstellen
             col1, col2, col3 = st.columns([8, 1, 1])
             
             with col1:
-                expander = st.expander(f"Posts von {handle_text} gescraped am {job['scraped_at'].strftime('%d.%m.%Y um %H:%M')}")
+                expander = st.expander(f"Posts von {handle_text} gescraped am {scraped_at_vienna.strftime('%d.%m.%Y um %H:%M')}")
             
             # Posts direkt aus job verwenden
             posts = [p for p in job['posts'] if 'warning' not in p]
@@ -81,7 +86,7 @@ def render_finished_jobs_tab():
                     st.write("**Profil:** Keine Posts verfügbar")
                 
                 # st.write(f"**Posts pro Profil:** {job['num_posts']}")
-                st.write(f"**Erstellt:** {job['scraped_at'].strftime('%d.%m.%Y, %H:%M')}")
+                st.write(f"**Erstellt:** {scraped_at_vienna.strftime('%d.%m.%Y, %H:%M')}")
                 
                 if posts:
                     st.write(f"**Posts gefunden:** {len(posts)}")
