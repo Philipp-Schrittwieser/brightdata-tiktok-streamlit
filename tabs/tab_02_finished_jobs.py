@@ -14,7 +14,7 @@ def render_finished_jobs_tab():
     if scraped_profiles.count_documents({}) == 0:
         st.info("Keine fertigen Jobs gefunden")
     else:
-        scraped_cursor = scraped_profiles.find()
+        scraped_cursor = scraped_profiles.find().sort("scraped_at", -1)
         for job in scraped_cursor:
             # print("JOB STRUKTUR:")
             # print(json.dumps(job, default=str, indent=2))  # Bessere Ausgabe
