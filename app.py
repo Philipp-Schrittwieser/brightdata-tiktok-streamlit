@@ -109,8 +109,8 @@ def main():
         
         if jobs_info["count"] > 0:
             # Auto-Refresh alle 3 Sekunden
-            st_autorefresh(interval=60000, key="autorefresh")
-            
+            st_autorefresh(interval=30000, key="autorefresh")
+
             for job in jobs_info["jobs"]:
                 handles = job.get('profile_handles', [])
                 if handles:
