@@ -111,8 +111,6 @@ def main():
         
         if jobs_info["count"] > 0:
             # Auto-Refresh alle 3 Sekunden
-            st_autorefresh(interval=30000, key="autorefresh")
-
             for job in jobs_info["jobs"]:
                 handles = job.get('profile_handles', [])
                 if handles:
@@ -127,7 +125,6 @@ def main():
                             border-top: 4px solid #ec4899;
                             border-radius: 50%;
                             animation: spin 5s linear infinite;
-                            margin-top: 30px;
                             margin: 10px auto;
                             vertical-align: middle;
                         }}
@@ -141,6 +138,7 @@ def main():
                             <div class="spinner-inline"></div>
                         </div>
                     """, unsafe_allow_html=True)
+
                 else:
                     st.markdown("""
                         <div style='background-color: #0f172a; border: 1px solid #1e293b; border-radius: 0.5rem; padding: 1rem; text-align: center;'>
@@ -162,6 +160,7 @@ def main():
         last_check_vienna = last_check_dt.astimezone(vienna_tz)
 
         st.markdown(f"<p style='color: #94a3b8; font-size: 0.8rem;'>Letzter Check: {last_check_vienna.strftime('%H:%M:%S')}</p>", unsafe_allow_html=True)
+        st_autorefresh(interval=60000, key="autorefresh")
 
     # Hauptbereich mit Tabs
     tab1, tab2 = st.tabs(["Neuen Job", "Fertige Jobs"])
