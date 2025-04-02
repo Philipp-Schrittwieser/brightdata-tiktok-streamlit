@@ -96,7 +96,7 @@ def main():
             <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>2.</span> Klicke auf "Analysieren" und links siehst du deinen laufenden Job</li>
             <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>3.</span> Sobald der Job abgeschlossen ist, wird er in fertige Jobs angezeigt</li>
             <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>4.</span> Du kannst den Browser jederzeit schließen, das Scraping läuft weiter</li>
-            <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>5.</span> Ein Scraping-Job dauert ca. 3 Minuten bis 2 Stunden</li>
+            <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>5.</span> Ein Scraping-Job dauert ca. 3 Minuten bis 2 Stunden, variert leider stark</li>
         </ul>
     </div>
     """, unsafe_allow_html=True)
