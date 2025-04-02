@@ -86,13 +86,14 @@ st.markdown("""
 def main():
     st.markdown("<h1 style='text-align: center; color: white; font-size: 3rem; font-weight: 700;'>TikTok Creator Analytics</h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #94a3b8; font-size: 1.5rem; margin-bottom: 3rem;'>We connect Boomers with Zoomers</p>", unsafe_allow_html=True)
+
     
     # Anleitung
     st.markdown("""
     <div style='background-color: rgba(31, 41, 55, 0.5); border: 1px solid #4b5563; border-radius: 0.5rem; padding: 1.5rem; max-width: 42rem; margin: 0 auto 3rem auto;'>
-        <h3 style='font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: #ec4899; text-align: center;'>So funktioniert's:</h3>
+        <h3 style='font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; color: #ec4899; text-align: center;'>So funktioniert's:</h3>
         <ul style='color: #d1d5db; margin-left: 1rem; list-style: none;'>
-            <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>1.</span> Gib die TikTok Handles (inkl. @) ein und wähle die Anzahl der Posts</li>
+            <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>1.</span> Gib die TikTok Handles (inkl. @) ein und wähle die Anzahl der Posts (derzeit 10)</li>
             <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>2.</span> Klicke auf "Analysieren" und links siehst du deinen laufenden Job</li>
             <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>3.</span> Sobald der Job abgeschlossen ist, wird er in fertige Jobs angezeigt</li>
             <li style='margin-bottom: 0.75rem;'><span style='color: #ec4899;'>4.</span> Du kannst den Browser jederzeit schließen, das Scraping läuft weiter</li>
@@ -116,11 +117,42 @@ def main():
                 handles = job.get('profile_handles', [])
                 if handles:
                     handles_text = ", ".join(handles)
-                    st.info(f"{handles_text} - {job.get('num_posts', 0)} Posts")
+                    st.markdown(f"""
+                        <style>
+                        .spinner-inline {{
+                            display: block;
+                            width: 30px;
+                            height: 30px;
+                            border: 4px solid #f3f3f3;
+                            border-top: 4px solid #ec4899;
+                            border-radius: 50%;
+                            animation: spin 5s linear infinite;
+                            margin-top: 30px;
+                            margin: 10px auto;
+                            vertical-align: middle;
+                        }}
+                        @keyframes spin {{
+                            0% {{ transform: rotate(0deg); }}
+                            100% {{ transform: rotate(360deg); }}
+                        }}
+                        </style>
+                        <div style='background-color: #0f172a; border: 1px solid #1e293b; border-radius: 0.5rem; padding: 1rem; margin-bottom:1rem'>
+                            <div style='text-align: left;'>{handles_text} - {job.get('num_posts', 0)} Posts</div>
+                            <div class="spinner-inline"></div>
+                        </div>
+                    """, unsafe_allow_html=True)
                 else:
-                    st.info("Unbekannte Creator - {job.get('num_posts', 0)} Posts")
+                    st.markdown("""
+                        <div style='background-color: #0f172a; border: 1px solid #1e293b; border-radius: 0.5rem; padding: 1rem; text-align: center;'>
+                            Unbekannte Creator - {job.get('num_posts', 0)} Posts
+                        </div>
+                    """, unsafe_allow_html=True)
         else:
-            st.info("Keine aktiven Jobs")
+            st.markdown("""
+                <div style='background-color: #0f172a; border: 1px solid #1e293b; border-radius: 0.5rem; padding: 1rem; text-align: center;'>
+                    Keine aktiven Jobs
+                </div>
+            """, unsafe_allow_html=True)
             
         # Zeit in Wien-Zeitzone umwandeln
         vienna_tz = pytz.timezone('Europe/Vienna')
@@ -128,6 +160,7 @@ def main():
         time_parts = jobs_info['last_check'].split(':')
         last_check_dt = current_time.replace(hour=int(time_parts[0]), minute=int(time_parts[1]), second=int(time_parts[2]))
         last_check_vienna = last_check_dt.astimezone(vienna_tz)
+
         st.markdown(f"<p style='color: #94a3b8; font-size: 0.8rem;'>Letzter Check: {last_check_vienna.strftime('%H:%M:%S')}</p>", unsafe_allow_html=True)
 
     # Hauptbereich mit Tabs

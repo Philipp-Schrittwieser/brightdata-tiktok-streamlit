@@ -47,8 +47,12 @@ def render_finished_jobs_tab():
             if posts:
                 with col2:
                     df = pd.DataFrame(posts)
-                    # entferne post_id, original_sound, profile_id, profile_avatar, profile_biography, preview_image, official_item, secu_id, original_item, shortcode, width, ratio, video_url, music, cdn_url, is_verified, carousel_images, tagged_user, tt_chain_token, commerce_info, timestamp, input, discovery_input, region
-                    df = df.drop(columns=['post_id', 'original_sound', 'profile_id', 'profile_avatar', 'profile_biography', 'preview_image', 'offical_item', 'secu_id', 'original_item', 'shortcode', 'width', 'ratio', 'video_url', 'music', 'cdn_url', 'is_verified', 'carousel_images', 'tagged_user', 'tt_chain_token', 'commerce_info', 'timestamp', 'input', 'discovery_input', 'region'])
+                    # Liste der Spalten die wir entfernen wollen
+                    columns_to_drop = ['post_id', 'original_sound', 'profile_id', 'profile_avatar', 'profile_biography', 'preview_image', 'offical_item', 'secu_id', 'original_item', 'shortcode', 'width', 'ratio', 'video_url', 'music', 'cdn_url', 'is_verified', 'carousel_images', 'tagged_user', 'tt_chain_token', 'commerce_info', 'timestamp', 'input', 'discovery_input', 'region', 'subtitle_url', 'subtitle_format', 'profile_username']
+                    # Nur existierende Spalten droppen
+                    existing_columns = [col for col in columns_to_drop if col in df.columns]
+                    if existing_columns:
+                        df = df.drop(columns=existing_columns)
                     csv = df.to_csv(index=False).encode('utf-8')
                     st.download_button(
                         label="CSV",
@@ -60,7 +64,7 @@ def render_finished_jobs_tab():
                     )
                 
                 with col3:
-                    json_str = json.dumps(posts, default=str, ensure_ascii=False)
+                    json_str = json.dumps(posts, default=str, ensure_ascii=False, indent=2)
                     st.download_button(
                         label="JSON",
                         data=json_str,
