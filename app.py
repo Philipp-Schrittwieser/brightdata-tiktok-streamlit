@@ -22,7 +22,7 @@ st.set_page_config(
 jobs = get_collection("jobs")
 
 # Auto-Refresh alle 3 Sekunden
-st_autorefresh(interval=6000, key="autorefresh")
+st_autorefresh(interval=60000, key="autorefresh")
 
 def get_running_jobs():
     running_jobs = jobs.find({"status": "running"})
